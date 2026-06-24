@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout Transparente</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 400px; margin: 50px auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px; }
+        input, button { width: 100%; padding: 10px; margin: 8px 0; box-sizing: border-box; }
+        button { background-color: #28a745; color: white; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h2>Finalizar Compra</h2>
+    <form id="payment-form">
+        <input type="email" id="email" placeholder="E-mail" required>
+        <input type="text" id="card-number" placeholder="Número do Cartão" required>
+        <input type="text" id="expiry" placeholder="MM/AA" required>
+        <input type="text" id="cvv" placeholder="CVV" required>
+        <button type="submit">Pagar Agora</button>
+    </form>
+
+    <script>
+        document.getElementById('payment-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            // Em produção, você usaria o SDK do gateway para gerar um token seguro aqui.
+            const dadosPagamento = {
+                tokenCartao: "tok_ficticio_12345", 
+                valor: 99.90,
+                parcelas: 1,
+                emailCliente: document.getElementById('email').value
+            };
+
+            const response = await fetch('/api/processar-pagamento', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(dadosPagamento)
+            });
+
+            const resultado = await response.json();
+            alert(resultado.mensagem);
+        });
+    </script>
+</body>
+</html>
